@@ -1,0 +1,300 @@
+=======================================================================================================================
+--------------------------------------(STLS)---------------------------------------------------------------------------
+=======================================================================================================================
+                              --- vector ---
+الفيكتور بيعمل شغل الأراي بتحسينات اضافية كتير .. :
+1D vector :
+vector<int> v(4) ---> {0 , 0 , 0 , 0}
+vector<int> v = {1 , 2 , 3}
+vector<int> v(3, 9) ---> {9 , 9 , 9}
+vector<int> v(v_c) ---> makes v = v_c
+------------
+2D vector : 
+vector<vector<int>> v(size, vector<int> (size))
+vector<vector<int>> v = { {1 , 2 , 3} , {4 , 5 , 6} }
+vector<vector<int>> v(2, vector<int>(3, 11))
+------------
+--> let's say that we need to push anything in our vector :
+v.push_back(anything) = v.emplace_back() -----> O(1)
+v.insert(position, anything) -----> O(n)
+v.emplace() ---> like insert function but faster
+v[index] = v.at(index)
+v.size() ---> returns how many elements in our vector
+v.pop_back() ---> deletes the last element in our vector -----> O(1)
+v.find(anything) ---> returns the iterator of the element, if it's not found it returns the v.end()
+v.front() ---> the first element
+v.back() ---> the last element
+v.begin() ---> the first position
+v.end() ---> the position after the last element's position
+v.rbegin() ---> the last position
+v.rend() ---> the element before the first element's position
+v.erase(v.begin(), v.end(), anything) -----> O(n)
+v.empty() -----> check if the vector is empty or not "boolen value"
+sort(v.begin(), v.end()) ---> sort increasingly -----> O(n log n)
+sort(v.rbegin(), v.rend()) ---> sort deccreasingly -----> O(n log n)
+reverse(v.begin(), v.end()) -----> O(n)
+auto it = *min_element(v.begin() , v.end()) ---> return iterator "min element"
+auto it = *max_element(v.begin() , v.end()) ---> return iterator "max element"
+auto p  = *minmax_element(v.begin() , v.end()) ---> return iterator pair "min & max element"
+lower_bound(v.begin(), v.end(), 20) ---> search for 20, return position (iterator) 
+binary_search(v.begin(),  v.end(), 23) ---> search for 23, return boolen value if it exist or not
+count(v.begin(), v.end(), element) ---> O(n), count all occurences of an element
+_______________________________________________________________________________________________________________________
+                              --- Stack ---
+Last In First Out : اخر عنصر بضيفه هو اول عنصر بيطلع لو عملتله بوب 
+الستاك بيرتب العناصر من الشمال لليمين على حسب اخر واحد عملتله بوش
+يعني لما بعمل بوش للعناصر بعملها بوش من اتجاه واحد فقط وهو التوب اول بوزيشن في الستاك
+------------
+stack<int> st;
+st.push(2);
+st.push(10);
+st.push(5);
+st.push(80);
+while(!st.empty()){
+ cout << st.top() << sp;
+ st.pop();
+} ---> output : 80 5 10 2
+st.push(anything) ---> insert elements in the top " the first elements " -----> O(1)
+st.top() ---> the only accessable position in the stack, not the middle nor the last position -----> O(1)
+st.pop() ---> delete the first element in our stack -----> O(1)
+st.empty() ---> check if it's empty or not "boolen value"
+_______________________________________________________________________________________________________________________
+                              --- Queue ---
+First In First Out : اول عنصر بضيفه هو اول عنصر بيطلع لو عملت بوب للكيو بتاعي
+لما بعمل بوش للعناصر بيعملها  push_back فقط
+بيتعامل زي الاراي في طريقة بوش العناصر انما لما بيحذف بيحذف اول واحد اتعمله بوش يعني اول عنصر
+بقدر اكسس على اول واخر بوزيشن فقط مقدرش اكسس على الميديل او اي مكان
+------------
+queue<int> q;
+q.push(3);
+q.push(4);
+q.push(5);  
+while (!q.empty()) {
+cout << q.front() << " ";
+q.pop();
+} ---> output : 3 4 5
+q.front() ---> access the first element -----> O(1)
+q.back() ---> access the last element -----> O(1)
+q.pop() ---> delete elements from the top of the queue only (fifo) -----> O(1)
+q.push(element) ---> add elements in the back of queue -----> O(1)
+q.empty() ---> checks if it has elements in it or not "boolen value"
+q.size() ---> returns the value of it's size ب
+q.emplace() --> add the constructs element in top of the queue
+_______________________________________________________________________________________________________________________
+                              --- Deque ---
+بيطلق عليه اسم دابل اينديد كيو " double ended queue " :
+ببساطة بقدر اضيف عناصر من الفرونت ومن الباك وبقدر ااكسس عليهم وكمان بقدر اكسس على كل عناصر الديكيو 
+اقدر اقول انه شبه الفيكتور تقريبا " بقدر اكسس على اي بوزيشن
+وفي الطباعة بتعامل معاه انه فيكتور لذلك انا قولت انه شبه الفيكتور
+------------
+dq[index] ---> returns an element of a specific index
+dq.push_back(element) ---> push from the end -----> O(1)
+dq.push_front(element) ---> push from the begin -----> O(1)
+dq.front() ---> access the first element -----> O(1)
+dq.back() ---> access the last element -----> O(1)
+dq.pop_back() ---> delete elements from the end -----> O(1)
+dq.pop_front() ---> delete elements from the top -----> O(1)
+dq.erase(dq.begin()) ---> For EX : delete the first element
+dq.erese(index) ---> erase dq[i] 
+dq.erese(dq.begin() , dq.begin() + 8) ---> erase from dq.begin() to dq.begin() + 8
+dq.size() ---> returns the value of it's size
+dq.resize(number) ---> change the size of the deque with a number
+dq.at(index) ---> accesse the element at a specific index
+dq.begin() ---> the first position
+dq.end() ---> the position after the last element's position
+dq.rbegin() ---> the last position
+dq.rend() ---> the element before the first element's position
+dq.insert(index) ---> insert elements at a specific index -----> O(n) // not sure of this but found it on geeksforgeeks :(
+dq.emplace_front() ---> insert an element at the front of the deque
+dq.emplace_back() ---> insert an element at the end of the deque
+dq.emplace(index) ---> insert new element before this index
+dq.empty() ---> checks if it has elements in it or not "boolen value"
+_______________________________________________________________________________________________________________________
+                              --- Priority Deque ---
+بكل بساطة, العناصر بتترتب بناء على قيمتها  من الكبير للصغير باي ديفولت واكبر عنصر ليه الاولوية فدايما موجود في بداية الكيو
+------------
+If you want to assign highest priority to the smallest element (min-heap), then inbuilt greater<type> can be used
+priority_queue<int, vector<int>, greater<int>> pq ---> from small to large : وهنا بيبقى شبه الفيكتور العادي وبيترتب من الصغير للكبير
+priority_queue<int, vector<int>, less<int>> pq ---> from large to small
+priority_queue<int> pq;
+pq.push(9);
+pq.push(10);
+pq.push(6);
+pq.top() = 10
+pq = {10 , 9 , 6}
+ولما بنعوز نطبع عناصره كله بنطبع التوب وبعدين بنعمل بوب زي ما بنعمل في الكيو
+------------
+priority_queue<int> temp(pq) ---> makes a copy of it
+pq.empty() ---> checks if it has elements in it or not "boolen value"
+pq.size() ---> returns the size of the priority queue
+pq.top() ---> returns top element of the priority queue
+pq.push(element) ---> adds the element into the priority queue -----> O(log n)
+pq.pop() ---> deletes the top element of the priority queue -----> O(log n)
+pq.emplace() ---> used to insert a new element into the priority queue container
+_______________________________________________________________________________________________________________________
+                              --- Set ---
+السيت بترتب العناصر باي ديفولت من الصغير للكبير وبتمنع تكرار العناصر فيها
+set<int> s = {5, 1, 3, 2, 3};
+for(int x : s) cout << x << " ";
+---> output : 1 2 3 5
+set<int,greater<int>> s ---> from large to small
+------------
+s.insert(element) = s.emplace(element) ---> add element to the set -----> O(log n)
+s.begin() ---> returns an iterator pointing to the first element of the set -----> O(1)
+s.end() ---> the position after the last element's position
+we can't access any index in the middle like vector or array so we use for example :
+set<int> s = {1, 4, 2, 3, 5};
+auto it1 = s.begin();
+auto it2 = next(it1, 2);
+cout << *it1 << " " << *it2;
+note " the '*' returns the element stored in the position, means it1 and it2 are iterators to the elements above.
+---> output : 1 3
+s.find() ---> returns the iterator of the element, if it's not found it returns the s.end() -----> O(log n)
+s.erase() like s.erase(s.begin()) or s.erase(element) ---> deletes the element from the set -----> O(log n)
+s.rbegin() ---> returns a reverse iterator pointing to the last element of the set
+s.rend() ---> returns a reverse iterator pointing to the element preceding the first element of the set
+s.size() ---> returns the number of elements in the set
+s.empty() ---> checks if the set is empty "boolen value"
+s.clear() ---> removes all elements from the set
+s.upper_bound(value) ---> find the first element in the set that is just greater than the given value
+لو ملقتش العنصر دا بترجع s.end()
+s.lower_bound(value) ---> find the first element in the set that is equal to or greater than the given value
+لو ملقتش العنصر دا بترجع s.end()
+for EX : cout << *s.upper_bound(5) << nl; ---> هترجع اول رقم اكبر من ال 5 فالسيت بتاعتي
+s.count(element) ---> returns boolen value for an element uf it's found in set or not
+_______________________________________________________________________________________________________________________
+                              --- Map ---
+الماب بتحتوي على قيمتين : value and key
+map<key datatype, valeu datatype> mp;
+الكي بيكون قيمة سبيشال مينفعش تتكرر في كونتينر الماب وكل كي بيكون بمثابة اندكس خاص بالفاليو فبقدر اكسس الفاليو عن طريق الكي
+وبالتالي الكي بيكون سورتد بطريقة تصاعدية دايما و بقدر اضيف عناصر واكسس على عناصر من خلال الكي 
+------------
+map<int, string> m = {{2, "For"}, {3, "Geeks"}};
+m.insert({1, "Geeks"});
+for(auto x: m)
+cout << x.first << " " << x.second << endl;
+---> output : 
+1 Geeks
+2 For
+3 Geeks
+Insert an element with insert() of emplace() -----> O(log n)
+Update element by key -----> O(log n)
+m.at(key) = m[key] = m.find(key) ---> returns the value of the key -----> O(log n)
+m.begin() ---> the first value of the first key
+m.end() ---> the position after the last element's position
+m.erase(key) ---> deletes the element with the specifice key -----> O(log n)
+m.count(element) ---> returns boolen value for an element uf it's found in set or not
+m.rend() ---> returns a reverse iterator pointing to the element preceding the first element of the map
+m.rbegin() ---> returns a reverse iterator pointing to the last element of the map
+m.find() ---> returns an iterator to the element with key if found, else returns the iterator to end
+m.upper_bound()	---> find the first element in the map that is just greater than the given key
+m.lower_bound()	---> find the first element in the map that is equal to or greater than the given key
+m.size() ---> returns the number of elements in the map
+m.empty() ---> returns whether the map is empty
+m.clear() ---> removes all the elements from the map
+_______________________________________________________________________________________________________________________
+                              --- Some Important Notes ---
+// Creating vector of pairs of type
+vector<pair<int,string>> v;
+// Insert pairs in vector
+v.push_back(make_pair(1, "Geeks"));
+v.push_back(make_pair(2, "Geeksfor"));
+v.push_back(make_pair(3, "GeeksforGeeks"));
+for(auto i: v) cout << i.first << " " << i.second << endl;
+---> output :
+1 Geeks
+2 Geeksfor
+3 GeeksforGeeks
+v.push_back( {1, "Geeks"} ) ---> if we need to push pairs
+v[2].first ---> Accessing key
+v[2].second ---> Accessing value
+v[2].first = 12 ---> Assigning key
+v[2].second = "GfG" ---> Assigning value
+_______________________________________________________________________________________________________________________
+                              --- Some Important Notes ---
+- **Ordered Containers:**
+  - Implemented using self-balancing binary search trees (typically **Red-Black Trees**).
+  - Maintain elements in a sorted order based on keys.
+  - Provide log-time performance: **O(log n)** for insertions, deletions, and lookups.
+  - Support operations like `lower_bound()`, `upper_bound()`, and in-order traversal.
+  - Examples: `std::map`, `std::set`, `std::multimap`, `std::multiset`.
+
+- **Unordered Containers:**
+  - Implemented using **hash tables**.
+  - Do not maintain any specific order of elements.
+  - Offer average constant-time performance: **O(1)** for insertions, deletions, and lookups, but worst-case is **O(n)** if many hash collisions occur.
+  - Do not support range-based queries or sorting-based operations.
+  - Examples: `std::unordered_map`, `std::unordered_set`, `std::unordered_multimap`, `std::unordered_multiset`.
+
+- **Use Cases:**
+  - Use **unordered containers** when performance is critical and element order is irrelevant—e.g., fast lookups in hash tables (`unordered_map` for dictionary-like access).
+  - Use **ordered containers** when you need elements in a sorted sequence or rely on range-based operations—e.g., maintaining a sorted leaderboard (`set` or `map`).
+
+- **Edge Considerations:**
+  - Unordered containers typically use more memory due to hash table overhead.
+  - Ordered containers provide predictable traversal order and better worst-case performance.
+_______________________________________________________________________________________________________________________
+                              --- multiset, orderedset, unorderd set, unorderd map ---
+multiset = {2 , 2 , 2 , 3 , 3 }
+ms.erase(2); --> هتمسح كل ال 2 الموجودة فالسيت
+ms.erase(ms.find(2)); --> هتمسح اول 2 بس من السيت
+ms.count(2) --> returns the frequancy of the element --> output = 3;
+------------
+order_of_key (k) : Number of items strictly smaller than (<) k
+find_by_order(k) : K-th element in a set (counting from zero)
+ordered_set --> order_of_key(x) --> كام رقم اقل من ال x
+find_by_order(x) --> the element of the index x (based 0)
+ordered_set s;
+s.insert(1);
+s.insert(3);
+s.insert(5);
+s.insert(7); 
+cout << *s.find_by_order(2) << endl; ---> هيطبع 5
+cout << s.order_of_key(4) << endl; ---> هيطبع 2  (فيه عنصرين أصغر من 4 : 1 و 3)
+------------
+unorderd map --> o(log n) in map / o(1) in unorderd map and the same in unorderd set 
+but in some big testcases the time complexity may reach o(n)
+لذلك unordered افضل في التيستات الصغيرة لان التيستات الكبيرة هتزود تايم كبير
+map and set --> binary search tree "BST" but unorderd map and set ---> hash table
+so not all data types can be hashed
+------------
+distance(it1, it2) ---> count how many elements from it1 to it2 -----> O(n)
+
+templates for ordered multiset and set :
+
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+
+using namespace __gnu_pbds;
+
+template <class T>
+using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+template <class T>
+using ordered_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+
+_____________________________________________(Tricks)________________________________________________________________
+
+-To sort a map by a value or as you want:
+    Store it in a vector of pair and sort it as you want:
+    map<string, int> mp;
+    vector<pair<string, int>> v(all(mp));
+    sort(all(v), [](auto &a, auto &b){
+        if(a.second == b.second)
+            return a.first < b.first;
+        else
+            return a.second > b.second; 
+    });
+
+-To Customize hash function for pair<int,int> for Unordered_Set
+    struct hash_pair {
+        size_t operator()(const pair<int,int>& p) const {
+            return hash<long long>()(((long long)p.first << 32) | (unsigned int)p.second);
+        }
+    };
+
+    unordered_set<pair<int, int>, hash_pair> st;
+
+-
+
+=======================================================================================================================
+=======================================================================================================================

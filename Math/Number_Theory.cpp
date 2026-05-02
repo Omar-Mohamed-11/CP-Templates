@@ -295,7 +295,7 @@ void linearSieve()
 }
 
 vector<int> spf(N);
-void spf_sieve()
+void spf_sieve() // O(n log(log n))
 {
     for (int i = 1; i < N; i++)
         spf[i] = i;
@@ -314,7 +314,7 @@ void spf_sieve()
     }
 }
 
-vector<pair<int, int>> prime_factors(int n)
+vector<pair<int, int>> prime_factors(int n) // O(log(n)) for each query
 {
     vector<pair<int, int>> freq;
     while (n != 1)

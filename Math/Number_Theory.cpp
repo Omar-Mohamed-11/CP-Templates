@@ -283,7 +283,7 @@ void linearSieve()
             lp[i] = i;
             pr.push_back(i);
         }
-        for (int j = 0; i * pr[j] < N; j++)
+        for (int j = 0; j < pr.size() && i * pr[j] < N; j++)
         {
             lp[i * pr[j]] = pr[j];
             if (pr[j] == lp[i])

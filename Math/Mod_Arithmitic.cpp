@@ -96,7 +96,7 @@ signed main()
     
     - Note: if p[j] % k == p[i] % k , then sum(i+1 → j) % k == 0
     - This theory used to get a longest subarray whose sum is divisible by k
-      By make an array (the mod for k on the prefix um array).
+      By make an array (the mod for k on the prefix sum array).
       If the (sum % k) for any two subarrays are equal
       then their summition is divisable by k.
       thats mean for each two diffrent mod we want to know:

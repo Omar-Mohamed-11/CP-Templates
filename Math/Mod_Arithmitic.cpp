@@ -33,7 +33,7 @@ ll big_mod(string s, ll mod) {
     return res;
 }
 
-// git a mod for (a ^ b)
+// git a mod for (a ^ b), fast power
 ll mod_pow(ll a, ll b, ll m = MOD) {
     ll res = 1;
     while (b) {
@@ -44,10 +44,26 @@ ll mod_pow(ll a, ll b, ll m = MOD) {
     return res;
 }
 
+// (a / b) % m = (a * (b ^ -1)) % m
+// Fermat little theorem:
+// if m is prime and gcd(a, m) = 1, then (a ^ -1) = (a ^ (m-2))
 ll mod_inv(ll a, ll m = MOD) {
-    return mod_pow(a, m - 2, m); // Fermat
+    return mod_pow(a, m - 2, m); 
 }
 
+// if m is prime, then (a * b) % m :
+ll div_mod(ll a, ll b, ll m){
+    return mul_mod(a, mod_inv(b, m), m);
+}
+
+
+
+
+// More safe than (lcm), for overflow
+ll Lcm(ll a, ll b){
+    if(a == 0 || b == 0) return 0;
+    return (a / gcd(a, b) * b);
+}
 
 // ===========================================================================//
 // -----------------------------(Main & Solve)--------------------------------//
@@ -72,25 +88,22 @@ signed main()
 // ----------------------------------(Notes)----------------------------------//
 // ===========================================================================//
 /*
-    int n,k;
-    cin >> n >> k;
-    vector<int> v(n), p(n, 0), mod(n);
-    cin(v);
-    p[0] = v[0];
-    for(int i = 1; i < n; i++) p[i] = p[i-1] + v[i];
-
-    for(int i = 0; i < n; i++) mod[i] = fix_mod(p[i], k);
-
-    map<int, vector<int>> mp;
-    mp[0].push_back(-1);
-    for(int i = 0; i < n; i++) mp[mod[i]].push_back(i);
-
-    int ans = 0;
-    for(auto &[x, v] : mp) ans = max(ans, v.back() - v[0]);
-
-    cout << ans;
+-Congruent: 
+    - a ≅ (b % n)  -->  (a % n) = (b % n)
+    - a ≅ (b % n) --> (a - b) ≅ (0 % n) --> (a - b) % n = 0
+    - (a - b) = (k * n)
+    - Ex: 19 ≅ (34 % 15)  -->  (19 % 15) = (34 % 15) --> (34 - 19) = (1 * 15)
     
+    - Note: if p[j] % k == p[i] % k , then sum(i+1 → j) % k == 0
+    - This theory used to get a longest subarray whose sum is divisible by k
+      By make an array (the mod for k on the prefix um array).
+      If the (sum % k) for any two subarrays are equal
+      then their summition is divisable by k.
+      thats mean for each two diffrent mod we want to know:
+      the first and last occurence from left, and the longest subarray is
+      -> max(ans, (last - first)) -> for all diffrent mods
 
+        
 
 */
 // ===========================================================================//

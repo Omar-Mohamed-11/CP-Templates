@@ -17,16 +17,12 @@ void MoRa()
 #define sp ' '
 #define all(v) v.begin(), v.end()
 #define MOD 1000000007
+#define fix_mod(n, m) (((n % m) + m) % m)
 
-// If you want to use a function take it copy and paste it in the main //
+
 //-----------------------------------------------------------------------------------//
 //--------------------------------------(Math-0)-------------------------------------//
 //-----------------------------------------------------------------------------------//
-ll fix_mod(ll n, ll m) // fot (+ and -) integers
-{
-    return ((n % m) + m) % m;
-}
-
 ll factorial(ll n)
 {
     ll res = 1;
@@ -48,6 +44,7 @@ ll nC2(ll n)
     return (n * (n - 1) / 2);
 }
 
+//-----------------------(Ranges & divisability)-------------------//
 ll range_sum(ll l, ll r)
 {
     if (l > r)
@@ -77,6 +74,21 @@ ll divisable_range_sum(ll l, ll r, ll x)
 
     return ((right - left) / x + 1) * (left + right) / 2;
 }
+
+ll divisable_range_count(ll l, ll r, ll x)
+{
+    if (l > r)
+        swap(l, r);
+    
+    auto count_to = [&](ll n) {
+        if (n <= 0) return 0LL;
+        return n / x;
+    };
+
+    return count_to(r) - count_to(l - 1);
+}
+
+//--------------------------------------------------------------//
 
 bool is_power_of(ll n, ll x)
 {
@@ -344,19 +356,60 @@ signed main()
 // -----------------------------(Topic Notes)---------------------------------//
 // ===========================================================================//
 /*
--NOTES:
-    -The count of range = (right - left) + 1
+-General:
+    - The count of range = (right - left) + 1
+    - (If there is quiries if yoy can do pre_compute for the required ,then do it.)
+    - (a and b) = a + b
+    - (a and b and c) = a + b + c
+    - (a or b) = (a + b) - (a and b)
+    - (a or b or c) = (a + b + c) - ((a and b) + (a and c) + (b and c)) + (a and b and c)
 
+-Divisability & divisors:
     -To know that a big number is divisable by 2 -> last digit should be even
     -To know that a big number is divisable by 3 -> summition of its digits should be
      divisable by 3
     -To know that a big number is divisable by 5 -> last digit should be (0 or 5)
+    
+    - a * b = x , then a, b are divisors for x
+    - T-Prime is a number x has only 3 divisors then it should has devisors (1, x, sqrt(x))
+    thats mean the sqrt(x) should be prime number
+    - number of multipliers for x in range from l to r = (floor(r/x)-ceil(l/x) + 1)
+    - number of trailing zero for x = number of multipliers for 5 in x
+      = sum((x/(5^i))) for all i (i=1,2,......,(num of digits of x))
+    
+    - If you have (a prime factors(pf) of any number(x) and the frequancy(f) for each prime factor):
+    -> then you can get the number of divisors for this number(x)
+    -> number of divisors = ((f1 + 1) * (f2 + 1) * ....... * (fn + 1))
+    -> (n) the number of distincit prime factor, (f) the frequancy for each prime factor
+    - For even divisors ((f[2] * (f1 + 1) * ....... * (fn + 1)))
+    
+    - The number of numbers thats divided by (x and y) from (l) to (r) is:
+        --> divisable_range_count(l, r, lcm(a, y))
+    - The number of numbers thats divided by (x or y) from (l) to (r) is:
+        --> the number of numbers are divisable by (x) 
+            (+) the number of numbers are divisable by (y)
+            (-) the number of numbers are divisable by (x and y) together.
+        = (divisable_range_count(l, r, x) + divisable_range_count(l, r, y)) - divisable_range_count(l, r, lcm(x, y))
+    - The number of numbers thats divided by neither (x nor y) from (l) to (r) is:
+        --> (r - l + 1) - (x or y)
 
-    -GCD: greatest common divisors of (a,b) = (a / lcm(a, b) * b)
-        : the biggest number can divide (a and b)
-    -LCM: lowest common multiplication = (a / gcd(a, b) * b)
-        : the lowest number can be divided by (a and b)
 
+-GCD & LCM:
+    -GCD: 
+        - greatest common divisors of (a,b) = (a / lcm(a, b) * b)
+        - gcd(a, b) -> the greatest number can divide (a and b).
+        - gcd(x, 0) = x
+        - if gcd(a, b) = 1, then a and b are coprime
+        - gcd(a, b) = gcd(b, a)
+        - gcd(a, b, c) = gcd(a, gcd(b, c)) = gcd(b, gcd(a, c)) = gcd(c, gcd(a, b))
+
+
+    -LCM: 
+        - lowest common multiple  = (a / gcd(a, b) * b)
+        - the lowest number can be divided by (a and b)
+    
+    
+-Logs:
     -log(n) = ln(n)
     -log2(n) , log10(n)
     -a = b^x  -> x = logb(a) (x is the number of divisions for (a/b))
@@ -364,18 +417,20 @@ signed main()
     -log(a/b) = log(a)-log(b)
     -log(a^n) = n*log(a)
 
+-Numbers system:
     -Number of digits of a decimal number X = floor(log10(X)) + 1  for->(decimal)
     -Number of digits of a binary number X = floor(log2(X)) + 1  for->(binary)
 
+-Sequances:
     -Arethmatic sequance: Nth = a + (n-1)*d   ,  Sn = n*(a+al)/2
     -Geometric sequance: Nth = a * (r^(n-1))  ,  Sn = a * (1-(r^n)) / (1-r)
 
+-Geometry:
     -Heron's Formula = to calculates the area of any triangle using only its three side lengths (a,b,c)
-                     = sqrtl(s * (s - a) * (s - b) * (s - c));
-        when s = (a + b + c)
+                     = sqrtl(s * (s - a) * (s - b) * (s - c)); when s = (a + b + c)
 
-    -Circle Equation: powl((x-h),2) + powl((y-h), 2) = r*r
-        center(h, k) , raduis=r
+    -Circle Equation: powl((x-h),2) + powl((y-h), 2) = r*r  , -->center(h, k) , raduis=r
+        
     -If the distance between the center(h,k) and point(x,y) is <= r
     then this point belongs to the circle
 
@@ -383,31 +438,12 @@ signed main()
     -Two lines are parallel if((y2-y1)*(x4-x3) == (y4-y3)*(x2-x1))
     -Two circles are intersect if(the distance between the centers <= (r1 + r2))  ,r1,r2 are the radiuses of the circles
 
+-Implemented functions:
     -floor(2.7) = 2 , floor(2.3)= 2  ,-floor(n/a) = n/a
     -ceil(2.3) = 3 , ceil(2.7) = 3   ,-ceil(n/a) = (n+a-1)/a
     -round(2.3) = 2 , round(2.5) = 3
     -trunc(2.999) = 2 ->(deletes the decimal points)
     -abs(2) = abs(-2) = 2
-
---------------------------------------------------------------------------------------------------
-
-    - a * b = x , then a, b are divisors for x
-    - T-Prime is a number x has only 3 divisors then it should has devisors (1, x, sqrt(x))
-    thats mean the sqrt(x) should be prime number
-    - number of multipliers for x in range from l to r = (floor(r/x)-ceil(l/x) + 1)
-    - number of trailing zero for x = number of multipliers for 5 in x
-      = sum((x/(5^i))) for all i (i=1,2,......,(num of digits of x))
-
-    -(If there is quiries if yoy can do pre_compute for the required ,then do it.)
-
-    - If you have (a prime factors(pf) of any number(x) and the frequancy(f) for each prime factor):
-        -> then you can get the number of divisors for this number(x)
-        -> number if divisors = ((f1 + 1) * (f2 + 1) * ....... * (fn + 1))
-        -> (n) the number of distincit prime factor, (f) the frequancy for each prime factor
-    - For even divisors ((f[2] * (f1 + 1) * ....... * (fn + 1)))
-
-
-
 */
 // ===========================================================================//
 // ===========================================================================//

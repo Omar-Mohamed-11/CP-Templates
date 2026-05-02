@@ -18,6 +18,7 @@ void MoRa()
 #define all(v) v.begin(), v.end()
 #define MOD 1000000007
 #define fix_mod(n, m) (((n % m) + m) % m)
+#define mul_mod(a, b, m) (((a % m) * (b % m)) % m)
 
 
 //-----------------------------------------------------------------------------------//
@@ -329,6 +330,18 @@ vector<pair<int, int>> prime_factors(int n) // O(log(n)) for each query
     }
 
     return freq;
+}
+
+// If the probelm have quaries
+int num_of_divisors(int n)
+{
+    vector<pair<int, int>> pf = prime_factors(n);
+    int ans = 1;
+    for(auto &[p, a] : pf){
+        ans *= (a + 1);
+    }
+
+    return ans;
 }
 
 // ===========================================================================//

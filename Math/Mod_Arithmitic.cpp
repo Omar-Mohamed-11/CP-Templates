@@ -103,7 +103,9 @@ signed main()
       the first and last occurence from left, and the longest subarray is
       -> max(ans, (last - first)) -> for all diffrent mods
 
-        
+    -Exponentiation:
+        - (a ^ b) % mod = mod_pow(a, b, mod)
+        - (a ^ (b ^ c)) = mod_pow(a, mod_pow(b, c, mod - 1), mod)
 
 */
 // ===========================================================================//

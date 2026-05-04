@@ -20,7 +20,6 @@ void MoRa()
 #define fix_mod(n, m) (((n % m) + m) % m)
 #define mul_mod(a, b, m) (((a % m) * (b % m)) % m)
 
-
 //-----------------------------------------------------------------------------------//
 //--------------------------------------(Math-0)-------------------------------------//
 //-----------------------------------------------------------------------------------//
@@ -295,6 +294,7 @@ void linearSieve()
     }
 }
 
+// ----------(Spf & PrimeFactors & Divisors)---------- //
 vector<int> spf(N);
 void spf_sieve() // O(n log(log n))
 {
@@ -342,6 +342,36 @@ int num_of_divisors(int n)
     }
 
     return ans;
+}
+
+// ------------ From Mod_arechmitic ------------ //
+ll mod_pow(ll a, ll b, ll m = MOD) {
+    ll res = 1;
+    while (b) {
+        if (b & 1) res = res * a % m;
+        a = a * a % m;
+        b >>= 1;
+    }
+    return res;
+}
+ll mod_inv(ll a, ll m = MOD) { return mod_pow(a, m - 2, m); }
+// -------------------------------------------- //
+
+int sum_of_divisors(int n)
+{
+    vector<pair<int, int>> pf = prime_factors(n);
+
+    ll sum = 1;
+
+    for (auto &[p, a] : pf){
+        ll num = (mod_pow(p, a + 1) - 1 + MOD) % MOD;
+        ll den = mod_inv(p - 1);
+
+        sum = sum * num % MOD * den % MOD;
+    }
+    sum = (sum - n + MOD) % MOD;
+
+    return sum;
 }
 
 // ===========================================================================//

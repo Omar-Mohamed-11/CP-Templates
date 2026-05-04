@@ -33,7 +33,7 @@ ll big_mod(string s, ll mod) {
     return res;
 }
 
-// git a mod for (a ^ b), fast power
+// git a mod for (a ^ b), fast power, Exponentiation
 ll mod_pow(ll a, ll b, ll m = MOD) {
     ll res = 1;
     while (b) {

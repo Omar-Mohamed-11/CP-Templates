@@ -183,21 +183,21 @@ bool isPrime(ll n)
     return 1;
 }
 
-map<ll, ll> primeFactors(ll n)
+vector<pair<ll, ll>> primeFactors(ll n)
 {
-    map<ll, ll> mp;
+    vector<pair<ll, ll>> res;
     for (ll i = 2; i * i <= n; i++)
     {
-        while (n % i == 0)
-        {
-            mp[i]++;
+        ll cnt = 0;
+        while (n % i == 0){
+            cnt++;
             n /= i;
         }
+        if (cnt > 0) res.push_back({i, cnt});
     }
-    if (n != 1)
-        mp[n]++;
+    if (n != 1) res.push_back({n, 1});
 
-    return mp;
+    return res;
 }
 //-----------------------------------------------------------------------------------//
 

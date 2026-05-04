@@ -51,7 +51,7 @@ ll mod_inv(ll a, ll m = MOD) {
     return mod_pow(a, m - 2, m); 
 }
 
-// if m is prime, then (a * b) % m :
+// To calculate (a / b) % m -> if m is prime, then (a * b) % m :
 ll div_mod(ll a, ll b, ll m){
     return mul_mod(a, mod_inv(b, m), m);
 }

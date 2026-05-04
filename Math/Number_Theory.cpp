@@ -413,8 +413,8 @@ signed main()
 // ===========================================================================//
 /*
 -General:
-    - The count of range = (right - left) + 1
     - (If there is quiries if yoy can do pre_compute for the required ,then do it.)
+    - The count of range = (right - left) + 1
     - (a and b) = a + b
     - (a and b and c) = a + b + c
     - (a or b) = (a + b) - (a and b)

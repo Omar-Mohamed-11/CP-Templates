@@ -374,8 +374,9 @@ int sum_of_divisors(int n)
     return sum;
 }
 
+// make a precompute for all N numbers and compute their sum except him;
 vector<int> div_sum(N);
-void precompute_all_div_sum() // o( sqrt(n) )
+void precompute_all_divisors_sum() // o( sqrt(n) )
 {
     for (int i = 1; i < N; i++)
     {

@@ -387,7 +387,7 @@ void precompute_all_divisors_sum() // o( sqrt(n) )
     }
 }
 
-// --------Euler Totient Function--------- //
+// --------(Euler Totient Function - Phi)--------- //
 // for n to know the count of number < n can be coprime with n = φ(n)
 vector<int> phi(N);
 void phi_sieve()

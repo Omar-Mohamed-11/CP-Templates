@@ -271,7 +271,7 @@ void sieve()
 }
 
 // ----------(Linear Sieve)---------- //
-vector<int> lp(N);
+vector<int> lp(N); // is_prime if(lp[i] >= 2 && lp[i] == i)
 vector<int> pr;
 void linearSieve()
 {

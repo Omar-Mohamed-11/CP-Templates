@@ -538,9 +538,9 @@ signed main()
 -Powers & Series:
     -if we have (n, k):
         -Sn = (1^k) + (2^k) + (3^k) + ... + (n^k) = (n ^ k) + 2 * ((n-1) ^ k)
-            = (mod_pow(n, k) + 2 * mod_pow(n-1, k)) % MOD;
+            = (mod_pow(n, k) + 2*mod_pow(n-1, k)) % MOD;
         -Pn = (1^1) + (2^2) + (3^3) + ... + (n^n) = (n ^ n) + 2 * ((n-1) ^ (n-1))
-            = (mod_pow(n, n) + 2 * mod_pow(n-1, n-1)) % MOD;
+            = (mod_pow(n, n) + 2*mod_pow(n-1, n-1)) % MOD;
  
 */
 // ===========================================================================//

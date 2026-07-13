@@ -56,8 +56,11 @@ ll even_range_sum(ll l, ll r)
     if (l > r)
         swap(l, r);
 
-    l += (l % 2);
-    r -= (r % 2);
+    if (l & 1) l++;
+    if (r & 1) r--;
+
+    if (l > r) return 0;
+
     return ((r - l) / 2 + 1) * (l + r) / 2;
 }
 ll odd_range_sum(ll l, ll r)

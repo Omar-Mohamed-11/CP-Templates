@@ -57,8 +57,6 @@ ll div_mod(ll a, ll b, ll m){
 }
 
 
-
-
 // More safe than (lcm), for overflow
 ll LCM(ll a, ll b){
     if(a == 0 || b == 0) return 0;

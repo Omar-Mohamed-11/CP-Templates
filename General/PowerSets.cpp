@@ -1,25 +1,9 @@
 //---------(بسم الله الرحمن الرحيم)---------//
 #include <bits/stdc++.h>
-#include <ext/pb_ds/assoc_container.hpp>
-#include <ext/pb_ds/tree_policy.hpp>
-
 using namespace std;
-using namespace __gnu_pbds;
-
-template <class T>
-using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-template <class T>
-using ordered_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
-
 void MoRa()
 {
     ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
-}
-void files()
-{
-    #ifndef ONLINE_JUDGE
-        freopen("input.txt", "r", stdin), freopen("output.txt", "w", stdout);
-    #endif
 }
 
 #define int long long
@@ -99,7 +83,6 @@ void Solve()
 signed main()
 {
     MoRa();
-    files();
     Solve();
     return 0;
 }

@@ -138,6 +138,7 @@ signed main()
 
     ------------------------------------------------------------------------
     - The number of all subsets of an array of size n is (2^(n-1)), The way by mask:
+    Time: 
     vector<vector<int>> ans;
     for (int mask = 0; mask < (1 << n); mask++)
     {

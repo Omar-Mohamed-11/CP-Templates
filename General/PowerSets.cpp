@@ -40,7 +40,7 @@ public:
         rec(n, v, i + 1);
     }
 
-    // The number of all subsets of an array of size n is (2^(n-1)), The way by mask:
+    // The number of all subsets of an array of size n is (2^n), The way by mask:
     void masks(int n, vector<int> & v){
         for (int mask = 0; mask < (1 << n); mask++){
             vector<int> cur;

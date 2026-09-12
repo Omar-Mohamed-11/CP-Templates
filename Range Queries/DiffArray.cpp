@@ -12,7 +12,7 @@ using namespace std;
     [1] Definition
         Difference Array -> fast range updates.
         For update [l, r] by val:
-            diff[l]     += val;
+            diff[l] += val;
             diff[r + 1] -= val;
         After all updates:
             arr[i] += diff[i] using prefix sum.
@@ -58,49 +58,38 @@ vector<ll> difference_array(vector<ll> arr, int q){
 
 /**
     [1] Definition
-
-    Difference Array -> fast rectangle updates.
-
-    For rectangle:
-        (x1, y1) -> (x2, y2)
-
-    We update 4 corners:
-
-        diff[x1][y1]         += val;
-        diff[x2+1][y1]       -= val;
-        diff[x1][y2+1]       -= val;
-        diff[x2+1][y2+1]     += val;
-
-    Then apply 2D prefix accumulation.
+        Difference Array -> fast rectangle updates.
+        For rectangle:
+            (x1, y1) -> (x2, y2)
+        We update 4 corners:
+            diff[x1][y1]         += val;
+            diff[x2+1][y1]       -= val;
+            diff[x1][y2+1]       -= val;
+            diff[x2+1][y2+1]     += val;
+        Then apply 2D prefix accumulation.
 
     [2] Time & Space Complexity
-
-    Update: O(1)
-    Build:  O(n * m)
-    Space:  O(n * m)
+        Update: O(1)
+        Build:  O(n * m)
+        Space:  O(n * m)
 
     [3] Tips
-
-    Use 1-based indexing.
-    D dimensions -> 2^D corner updates.
+        Use 1-based indexing.
+        D dimensions -> 2^D corner updates.
 */
 
 // returns updated matrix
 vector<vector<ll>> difference_array(vector<vector<ll>> arr, int q){
-
     int n = arr.size();
     int m = arr[0].size();
-
     vector<vector<ll>> diff(
         n + 2,
         vector<ll>(m + 2, 0)
     );
 
     while (q--){
-
         int x1, y1, x2, y2;
         ll val;
-
         cin >> x1 >> y1 >> x2 >> y2 >> val;
 
         if (x1 > x2)
@@ -117,21 +106,18 @@ vector<vector<ll>> difference_array(vector<vector<ll>> arr, int q){
 
     // Prefix in rows
     for (int i = 1; i <= n; i++){
-
         for (int j = 1; j <= m; j++)
             diff[i][j] += diff[i - 1][j];
     }
 
     // Prefix in columns
     for (int i = 1; i <= n; i++){
-
         for (int j = 1; j <= m; j++)
             diff[i][j] += diff[i][j - 1];
     }
 
     // Apply updates
     for (int i = 1; i <= n; i++){
-
         for (int j = 1; j <= m; j++)
             arr[i - 1][j - 1] += diff[i][j];
     }
@@ -143,24 +129,18 @@ vector<vector<ll>> difference_array(vector<vector<ll>> arr, int q){
 
 /**
     [1] Definition
-
-    Difference Array -> fast cuboid updates.
-
-    For cuboid:
-        (x1, y1, z1) -> (x2, y2, z2)
-
-    We update 8 corners.
+        Difference Array -> fast cuboid updates.
+        For cuboid:
+            (x1, y1, z1) -> (x2, y2, z2)
+        We update 8 corners.
 
     [2] Time & Space Complexity
-
-    Update: O(1)
-    Build:  O(n * m * k)
-    Space:  O(n * m * k)
+        Update: O(1)
+        Build:  O(n * m * k)
+        Space:  O(n * m * k)
 
     [3] Tips
-
     Use 1-based indexing.
-
     D dimensions -> 2^D corner updates.
 */
 
@@ -175,10 +155,7 @@ vector<vector<vector<ll>>> difference_array(vector<vector<vector<ll>>> arr,int q
         int x1, y1, z1;
         int x2, y2, z2;
         ll val;
-
-        cin >> x1 >> y1 >> z1
-            >> x2 >> y2 >> z2
-            >> val;
+        cin >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> val;
 
         if (x1 > x2)
             swap(x1, x2);
@@ -212,9 +189,7 @@ vector<vector<vector<ll>>> difference_array(vector<vector<vector<ll>>> arr,int q
 
     // Prefix in Y
     for (int i = 1; i <= n; i++){
-
         for (int j = 1; j <= m; j++){
-
             for (int z = 1; z <= k; z++)
                 diff[i][j][z] += diff[i][j - 1][z];
         }
@@ -222,9 +197,7 @@ vector<vector<vector<ll>>> difference_array(vector<vector<vector<ll>>> arr,int q
 
     // Prefix in Z
     for (int i = 1; i <= n; i++){
-
         for (int j = 1; j <= m; j++){
-
             for (int z = 1; z <= k; z++)
                 diff[i][j][z] += diff[i][j][z - 1];
         }
@@ -232,9 +205,7 @@ vector<vector<vector<ll>>> difference_array(vector<vector<vector<ll>>> arr,int q
 
     // Apply updates
     for (int i = 1; i <= n; i++){
-
         for (int j = 1; j <= m; j++){
-
             for (int z = 1; z <= k; z++)
                 arr[i - 1][j - 1][z - 1] += diff[i][j][z];
         }

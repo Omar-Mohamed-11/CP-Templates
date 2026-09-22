@@ -35,3 +35,43 @@ int main()
 
     return 0;
 }
+
+
+
+// ===========================================================================//
+// -----------------------------(Topic Notes)---------------------------------//
+// ===========================================================================//
+/*
+-General:
+    -Complete Graph:
+        -every node connected to all other nodes directly.
+        -every node has (n - 1) edges if there is n vertices.
+
+    -Bipartite Graph:
+        -if we can divide all its vertices into two separate sets.
+        -no edge is allowed between two vertices in the same set.
+        -every edge must connect two nodes from diffrent sets;
+
+    -Directed Graph (digraph): is a graph where each edge has a direction.
+    -Undirected Graph: is a graph where edges have no direction.
+
+    -Directed Cyclic Graph:
+        -is a directed graph that contains at least one cycle.
+
+    -Directed Acyclic Graph (DAG):
+        -Every edge has a direction.
+        -The graph contains no cycle.
+        -You cannot start from a vertex and follow the directed edges 
+        and eventually return to that same vertex.
+
+    -Tree:
+        -the tree is an undirected graph.
+        -should has no cycles.
+        -the number of edges of the tree of n vertices is (n - 1).
+
+    
+
+    
+*/
+// ===========================================================================//
+// ===========================================================================//

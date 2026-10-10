@@ -112,10 +112,20 @@ DFS Template Applications:
     - Parent Tracking and Path Reconstruction
     - Entry / Exit Times (in / out)
     - Ancestor Checking
-    - Depth Calculation
+    - Depth Calculation -> (Single Source Shortest Path (on tree): (SSSP))
     - Subtree Size Calculation
     - Directed Graph Cycle Detection (using colors)
 
 ───────────────────────────────────────────────────────────────────────────────────────
+Number of connected components:
+    - It is the number of vertices you can dfs starting from it. (Trying to dfs all [1 -> n])
+
+Is a tree? IF:
+    -the tree is an undirected graph.
+    -should has no cycles.
+    -the number of edges of the tree of n vertices is (n - 1).
+    - ((m == n - 1) && num_of_connected_components = 1)
+
+
 
 */

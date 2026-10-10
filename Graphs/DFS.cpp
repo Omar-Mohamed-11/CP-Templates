@@ -21,6 +21,7 @@ public:
     vector<int> depth; // Depth of vertex from root
     vector<int> subtree; // Counts the num of vertices in the subtree for each vertex
     vector<int> color; // DFS State
+    int diameter;
 
     DFS(){};
     DFS(int n) : n(n) {
@@ -33,6 +34,7 @@ public:
         subtree.resize(n + 1, 1);
         color.resize(n + 1, 0);
         timer = 0;
+        diameter = 0;
     }
 
     void add_edge(int u, int v) {adj[u].push_back(v);}
@@ -89,6 +91,53 @@ public:
         }
         return ans;
     }
+
+    // Time: O(n + m)
+    bool is_bipartite(int node, int c){
+        vis[node] = 1;
+        color[node] = c;
+        for(auto & ch : adj[node]){
+            if(!vis[ch]){
+                if(is_bipartite(ch, c ^ 1) == 0)
+                    return 0;
+            }
+            else{
+                if(color[node] == color[ch])
+                    return 0;
+            }
+        }
+        return 1;
+    }
+
+    // Time: O(n + m)
+    bool contains_cycle(int node, int par){
+        vis[node] = 1;
+        for(auto & ch : adj[node]){
+            if(!vis[ch]){
+                if(contains_cycle(ch, node))
+                    return 1;
+            }
+            else{
+                if(ch != par) return 1;
+            }
+        }
+        return 0;
+    }
+
+    // Time: O(n + m)
+    int treeDdiameter(int v){
+        vis[v] = 1;
+        int mx1 = 0, mx2 = 0;
+        for(auto & u : adj[v]){
+            if(!vis[u]){
+                int h = treeDdiameter(u) + 1;
+                if(h > mx1) mx2 = mx1, mx1 = h;
+                else if(h > mx2) mx2 = h;
+            }
+        }
+        diameter = max(diameter, mx1 + mx2);
+        return mx1;
+    }
 };
 
 //----------------------------------------(NOTES)-------------------------------------//
@@ -99,12 +148,13 @@ Ancestor:
 - Parent = direct ancestor.
 
 - If u is ancestor of v:
-    in[u] < in[v]
-    out[v] < out[u]
+    - in[u] < in[v]
+    - out[v] < out[u]
+    - then v lies in the subtree of ux
 
 Therefore:
     u is ancestor of v iff
-    in[u] <= in[v] && out[v] <= out[u]
+    (in[u] <= in[v] && out[u] >= out[v])
 
 ───────────────────────────────────────────────────────────────────────────────────────
 DFS Template Applications:
@@ -120,12 +170,23 @@ DFS Template Applications:
 Number of connected components:
     - It is the number of vertices you can dfs starting from it. (Trying to dfs all [1 -> n])
 
-Is a tree? IF:
-    -the tree is an undirected graph.
-    -should has no cycles.
-    -the number of edges of the tree of n vertices is (n - 1).
-    - ((m == n - 1) && num_of_connected_components = 1)
+Is a tree?
+    - the tree is an undirected graph.
+    - should has no cycles.
+    - the number of edges of the tree of n vertices is (n - 1).
+    - if ((m == n - 1) && num_of_connected_components == 1)
 
+Is Bipartite 
+    - if we can divide all its vertices into two separate sets.
+    - no edge is allowed between two vertices in the same set.
+    - every edge must connect two nodes from diffrent sets.
+
+Diameter of Tree:
+    - it is defined as the longest path between any 2 nodes in the tree.
+    - make a dfs from any node as a root and find the farthest node (x).
+    - then make a dfs from x and find the maximum distance from this node to any other node.
+    - Case 2: Root is not on the diameter:
+    - Case 1: Root is on the diameter:
 
 
 */

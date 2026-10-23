@@ -167,7 +167,7 @@ long long permutation_order(const vector<int>& p) {
 //-----------------------------------------------------------------------------//
 
 // ============================================================
-// EXAMPLE
+// EXAMPLES
 // ============================================================
 
 int main() {
@@ -214,8 +214,21 @@ int main() {
 }
 
 
-//----------------------------(Permutaion Notes)-----------------------//
+//-----------------------------------(Permutaion Notes)---------------------------------//
 /*
+==================== TIME COMPLEXITY ========================
+1.  is_permutation(p)                  : O(n)
+2.  inverse_permutation(p)             : O(n)
+3.  get_cycles(p)                      : O(n)
+4.  num_of_cycles_in_permutation(p)    : O(n)
+5.  get_cycle_lengths(p)               : O(n)
+6.  min_swaps_to_identity(p)           : O(n)
+7.  is_identity_permutation(p)         : O(n)
+8.  compose_permutations(p, q)         : O(n)
+9.  permutation_power(p, k)            : O(n * log(k))
+10. permutation_order(p)               : O(n * log(n))
+=============================================================
+
 
 - in the permutation problem:
     we use the next_permutation fun to see the pattern of the code like this,

@@ -17,6 +17,7 @@ public:
     vector<bool> vis;
     vector<int> par;
     vector<int> dist; // Depth of vertex from root
+    vector<int> level; // Count of vertices at each BFS level
     vector<int> color; // BFS State
 
     BFS(){};
@@ -25,6 +26,7 @@ public:
         vis.resize(n + 1, 0);
         par.resize(n + 1, -1);
         dist.resize(n + 1, -1);
+        level.resize(n + 1, 0);
         color.resize(n + 1, -1);
     }
 
@@ -47,6 +49,7 @@ public:
                     vis[u] = 1;
                     par[u] = v;
                     dist[u] = dist[v] + 1;
+                    level[dist[u]]++;
                     q.push(u);
                 }
             }

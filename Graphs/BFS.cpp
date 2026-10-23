@@ -175,6 +175,35 @@ public:
 
         return *max_element(all(dist));
     }
+
+    // Time: O(n + m)
+    // Memory: O(n)
+    // Safe for N <= 1e6 in most 256 MB problems (depends on M and other data)
+    vector<vector<int>> get_connected_components(){
+        vector<vector<int>> components;
+        for(int i = 1; i <= n; i++){
+            if(!vis[i]){
+                vector<int> component;
+                queue<int> q;
+                q.push(i);
+                vis[i] = 1;
+                while(!q.empty()){
+                    int v = q.front();
+                    q.pop();
+                    component.push_back(v);
+                    for(auto &u : adj[v]){
+                        if(!vis[u]){
+                            vis[u] = 1;
+                            q.push(u);
+                        }
+                    }
+                }
+                components.push_back(component);
+            }
+        }
+
+        return components;
+    }
 };
 
 //----------------------------------------(NOTES)-------------------------------------//

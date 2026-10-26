@@ -1354,8 +1354,6 @@ Use this section as a placeholder for future graph topics. Add new sections abov
 
 Potential topics to study:
 
-- [ ] Topological Sorting
-- [ ] Kahn's Algorithm
 - [ ] Strongly Connected Components (SCC)
 - [ ] Bridges and Articulation Points
 - [ ] Disjoint Set Union (DSU)

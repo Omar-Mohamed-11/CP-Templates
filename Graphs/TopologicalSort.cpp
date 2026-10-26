@@ -25,9 +25,8 @@ struct TopoSort {
 
     // Time Complexity: O(1) amortized
     // Space Complexity: O(1)
-    // Inserts a directed/undirected edge from vertex u to v, v to u.
+    // Inserts a directed edge from vertex u to v.
     void add_edge(int u, int v) {adj[u].push_back(v);}
-    void add_edges(int u, int v) {adj[u].push_back(v); adj[v].push_back(u);}
 
     // Time Complexity: O(V + E) overall
     // Space Complexity: O(V)

@@ -33,7 +33,9 @@ void kahns(int n){
     reverse(all(ans));
 }
 
-
+bool is_valid_topo_sort(int n){
+    return ans.size() == n;
+}
 
 
 int main()

@@ -34,7 +34,7 @@ struct TopoSort {
     void dfs(int v) {
         vis[v] = 1;
         for (int u : adj[v]) {
-            if (vis[u] == 0)
+            if (!vis[u])
                 dfs(u);
             else if (vis[u] == 1)
                 bad = true;

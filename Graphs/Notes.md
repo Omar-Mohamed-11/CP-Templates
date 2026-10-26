@@ -28,16 +28,25 @@
   - [4.5 Multi-Source BFS](#45-multi-source-bfs)
   - [4.6 Grid BFS](#46-grid-bfs)
   - [4.7 Tree Diameter](#47-tree-diameter)
-- [5. Dijkstra's Algorithm](#5-dijkstras-algorithm)
-  - [5.1 Properties and Complexity](#51-properties-and-complexity)
-  - [5.2 Shortest Distance](#52-shortest-distance)
-  - [5.3 Parent Tracking and Path Reconstruction](#53-parent-tracking-and-path-reconstruction)
-  - [5.4 Counting Shortest Paths](#54-counting-shortest-paths)
-  - [5.5 Minimum and Maximum Number of Edges](#55-minimum-and-maximum-number-of-edges)
-  - [5.6 Important Conditions](#56-important-conditions)
-- [6. DFS vs. BFS vs. Dijkstra](#6-dfs-vs-bfs-vs-dijkstra)
-- [7. Quick Decision Guide](#7-quick-decision-guide)
-- [8. Future Notes](#8-future-notes)
+- [5. Topological Sorting](#5-topological-sorting)
+  - [5.1 DFS using Pointer](#51-dfs-using-pointer)
+  - [5.2 DFS using Vector](#52-dfs-using-vector)
+  - [5.3 Kahn's Algorithm](#53-kahns-algorithm)
+  - [5.4 Kahn's Algorithm — Level by Level](#54-kahns-algorithm--level-by-level)
+  - [5.5 DFS Cycle Detection](#55-dfs-cycle-detection)
+  - [5.6 Topological Sort Template — DFS](#56-topological-sort-template--dfs)
+  - [5.7 Topological Sort Template — Kahn](#57-topological-sort-template--kahn)
+  - [5.8 Choosing Between Them](#58-choosing-between-them)
+- [6. Dijkstra's Algorithm](#6-dijkstras-algorithm)
+  - [6.1 Properties and Complexity](#61-properties-and-complexity)
+  - [6.2 Shortest Distance](#62-shortest-distance)
+  - [6.3 Parent Tracking and Path Reconstruction](#63-parent-tracking-and-path-reconstruction)
+  - [6.4 Counting Shortest Paths](#64-counting-shortest-paths)
+  - [6.5 Minimum and Maximum Number of Edges](#65-minimum-and-maximum-number-of-edges)
+  - [6.6 Important Conditions](#66-important-conditions)
+- [7. DFS vs. BFS vs. Dijkstra](#7-dfs-vs-bfs-vs-dijkstra)
+- [8. Quick Decision Guide](#8-quick-decision-guide)
+- [9. Future Notes](#9-future-notes)
 
 ---
 
@@ -535,13 +544,603 @@ The two-traversal method works because the input is a tree.
 
 ---
 
-# 5. Dijkstra's Algorithm
+# 5. Topological Sorting
+
+> Used for **Directed Acyclic Graphs (DAGs)**.
+
+A **topological ordering** is an ordering of the vertices such that for every directed edge:
+
+```text
+u -> v
+```
+
+`u` appears before `v`.
+
+### Important
+
+- Topological Sort only exists if the graph has **no directed cycle**.
+- A DAG can have **multiple valid topological orders**.
+- Time Complexity: **O(n + m)**
+- Space Complexity: **O(n + m)**
+
+---
+
+## 5.1 DFS using Pointer
+
+```cpp
+const int N = 2e5 + 9;
+
+int topo[N], vis[N], n, m, p;
+vector<int> adj[N];
+
+void dfs(int u)
+{
+    vis[u] = 1;
+
+    for(auto &v : adj[u])
+        if(vis[v] == false)
+            dfs(v);
+
+    topo[p--] = u;
+}
+
+int main()
+{
+    ios::sync_with_stdio(0);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    cin >> n >> m;
+
+    for(int i = 0; i < m; ++i)
+    {
+        int u, v;
+        cin >> u >> v;
+        --u;
+        --v;
+
+        adj[u].emplace_back(v);
+    }
+
+    p = n - 1;
+
+    for(int i = 0; i < n; ++i)
+        if(vis[i] == false)
+            dfs(i);
+
+    for(int i = 0; i < n; ++i)
+        cout << topo[i] + 1 << " ";
+}
+```
+
+### Idea
+
+DFS puts a node into `topo` **after visiting all of its outgoing edges**.
+
+So nodes are added in **postorder**.
+
+Since the last finished node should come first, we fill the array from right to left:
+
+```cpp
+topo[p--] = u;
+```
+
+---
+
+## 5.2 DFS using Vector
+
+Same idea as above, but instead of filling the answer from right to left, we append nodes and reverse at the end.
+
+```cpp
+const int N = 2e5 + 9;
+
+int vis[N], n, m;
+vector<int> adj[N];
+vector<int> topo;
+
+void dfs(int u)
+{
+    vis[u] = 1;
+
+    for(auto &v : adj[u])
+        if(vis[v] == false)
+            dfs(v);
+
+    topo.emplace_back(u);
+}
+
+int main()
+{
+    ios::sync_with_stdio(0);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    cin >> n >> m;
+
+    for(int i = 0; i < m; ++i)
+    {
+        int u, v;
+        cin >> u >> v;
+        --u;
+        --v;
+
+        adj[u].emplace_back(v);
+    }
+
+    for(int i = 0; i < n; ++i)
+        if(vis[i] == false)
+            dfs(i);
+
+    reverse(topo.begin(), topo.end());
+
+    for(int i = 0; i < n; ++i)
+        cout << topo[i] + 1 << " ";
+}
+```
+
+### Important
+
+Without:
+
+```cpp
+reverse(topo.begin(), topo.end());
+```
+
+the result is the **reverse topological order**.
+
+---
+
+## 5.3 Kahn's Algorithm
+
+Kahn's Algorithm uses **BFS + Indegree**.
+
+### Idea
+
+`inDeg[u]` = number of edges going **into** `u`.
+
+Any node with:
+
+```cpp
+inDeg[u] == 0
+```
+
+can be placed immediately in the topological order.
+
+After taking `u`, remove all edges:
+
+```text
+u -> v
+```
+
+by decreasing:
+
+```cpp
+inDeg[v]--;
+```
+
+If:
+
+```cpp
+inDeg[v] == 0
+```
+
+then `v` is ready to be processed.
+
+```cpp
+const int N = 2e5 + 9;
+
+int n, m, inDeg[N];
+vector<int> adj[N];
+
+int main()
+{
+    ios::sync_with_stdio(0);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    cin >> n >> m;
+
+    for(int i = 0; i < m; ++i)
+    {
+        int u, v;
+        cin >> u >> v;
+        --u;
+        --v;
+
+        adj[u].emplace_back(v);
+        inDeg[v]++;
+    }
+
+    queue<int> q;
+
+    for(int i = 0; i < n; ++i)
+        if(inDeg[i] == 0)
+            q.push(i);
+
+    vector<int> topo;
+
+    while(q.size())
+    {
+        int u = q.front();
+        q.pop();
+
+        topo.emplace_back(u);
+
+        for(auto &v : adj[u])
+        {
+            inDeg[v]--;
+
+            if(inDeg[v] == 0)
+                q.push(v);
+        }
+    }
+
+    for(auto &u : topo)
+        cout << u + 1 << " ";
+}
+```
+
+### Cycle Detection
+
+This is one of the main advantages of Kahn's Algorithm.
+
+If:
+
+```cpp
+topo.size() != n
+```
+
+then the graph contains a **cycle**.
+
+```cpp
+if(topo.size() != n)
+    cout << "Cycle exists";
+```
+
+Why?
+
+A cycle has no node whose indegree can become `0`, so some nodes will never be added to `topo`.
+
+---
+
+## 5.4 Kahn's Algorithm — Level by Level
+
+Sometimes we need to process all currently available nodes as **one level**.
+
+Instead of processing the queue normally:
+
+```cpp
+while(q.size())
+{
+    int u = q.front();
+    q.pop();
+    ...
+}
+```
+
+we save the current queue size:
+
+```cpp
+int sz = q.size();
+```
+
+and process exactly those nodes.
+
+```cpp
+const int N = 2e5 + 9;
+
+int n, m, inDeg[N];
+vector<int> adj[N];
+
+int main()
+{
+    ios::sync_with_stdio(0);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    cin >> n >> m;
+
+    for(int i = 0; i < m; ++i)
+    {
+        int u, v;
+        cin >> u >> v;
+        --u;
+        --v;
+
+        adj[u].emplace_back(v);
+        inDeg[v]++;
+    }
+
+    queue<int> q;
+
+    for(int i = 0; i < n; ++i)
+        if(inDeg[i] == 0)
+            q.push(i);
+
+    vector<int> topo;
+
+    while(q.size())
+    {
+        int sz = q.size();
+        vector<int> V;
+
+        while(sz--)
+        {
+            int u = q.front();
+            q.pop();
+
+            topo.emplace_back(u);
+
+            for(auto &v : adj[u])
+            {
+                inDeg[v]--;
+
+                if(inDeg[v] == 0)
+                    V.emplace_back(v);
+            }
+        }
+
+        for(auto &u : V)
+            q.push(u);
+    }
+
+    for(auto &u : topo)
+        cout << u + 1 << " ";
+}
+```
+
+### Why use `V`?
+
+Suppose the queue currently contains:
+
+```text
+A B C
+```
+
+We want `A B C` to belong to the **same level**.
+
+While processing them, some new nodes become available.
+
+Instead of putting those new nodes directly into `q`, we put them into:
+
+```cpp
+vector<int> V;
+```
+
+After finishing the current level:
+
+```cpp
+for(auto &u : V)
+    q.push(u);
+```
+
+Now all newly available nodes belong to the **next level**.
+
+---
+
+## 5.5 DFS Cycle Detection
+
+The normal:
+
+```cpp
+vis[u] = 1;
+```
+
+only tells us whether a node was visited.
+
+For cycle detection in a directed graph, use **3 states**:
+
+```text
+0 -> Not visited
+1 -> Currently inside DFS
+2 -> Completely processed
+```
+
+```cpp
+int color[N];
+
+bool dfs(int u)
+{
+    color[u] = 1;
+
+    for(auto &v : adj[u])
+    {
+        if(color[v] == 1)
+            return true;
+
+        if(color[v] == 0 && dfs(v))
+            return true;
+    }
+
+    color[u] = 2;
+    topo.emplace_back(u);
+
+    return false;
+}
+```
+
+If we find:
+
+```cpp
+color[v] == 1
+```
+
+then `v` is an ancestor in the current DFS path, meaning we found a **back edge** and therefore a cycle.
+
+---
+
+## 5.6 Topological Sort Template — DFS
+
+Reusable version with cycle detection:
+
+```cpp
+const int N = 2e5 + 9;
+
+int n, m, color[N];
+vector<int> adj[N], topo;
+
+bool dfs(int u)
+{
+    color[u] = 1;
+
+    for(auto &v : adj[u])
+    {
+        if(color[v] == 1)
+            return true;
+
+        if(color[v] == 0 && dfs(v))
+            return true;
+    }
+
+    color[u] = 2;
+    topo.emplace_back(u);
+
+    return false;
+}
+
+int main()
+{
+    ios::sync_with_stdio(0);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    cin >> n >> m;
+
+    for(int i = 0; i < m; ++i)
+    {
+        int u, v;
+        cin >> u >> v;
+        --u;
+        --v;
+
+        adj[u].emplace_back(v);
+    }
+
+    for(int i = 0; i < n; ++i)
+        if(color[i] == 0 && dfs(i))
+        {
+            cout << "Cycle exists";
+            return 0;
+        }
+
+    reverse(topo.begin(), topo.end());
+
+    for(auto &u : topo)
+        cout << u + 1 << " ";
+}
+```
+
+---
+
+## 5.7 Topological Sort Template — Kahn
+
+Reusable version with cycle detection:
+
+```cpp
+const int N = 2e5 + 9;
+
+int n, m, inDeg[N];
+vector<int> adj[N];
+
+int main()
+{
+    ios::sync_with_stdio(0);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    cin >> n >> m;
+
+    for(int i = 0; i < m; ++i)
+    {
+        int u, v;
+        cin >> u >> v;
+        --u;
+        --v;
+
+        adj[u].emplace_back(v);
+        inDeg[v]++;
+    }
+
+    queue<int> q;
+
+    for(int i = 0; i < n; ++i)
+        if(inDeg[i] == 0)
+            q.push(i);
+
+    vector<int> topo;
+
+    while(q.size())
+    {
+        int u = q.front();
+        q.pop();
+
+        topo.emplace_back(u);
+
+        for(auto &v : adj[u])
+        {
+            inDeg[v]--;
+
+            if(inDeg[v] == 0)
+                q.push(v);
+        }
+    }
+
+    if(topo.size() != n)
+    {
+        cout << "Cycle exists";
+        return 0;
+    }
+
+    for(auto &u : topo)
+        cout << u + 1 << " ";
+}
+```
+
+---
+
+## 5.8 Choosing Between Them
+
+| Method | Main Idea | Cycle Detection | Extra Use |
+|---|---|---|---|
+| DFS + Pointer | DFS postorder | With 3 states | Simple/flexible |
+| DFS + Vector | DFS postorder + reverse | With 3 states | Clean template |
+| Kahn | BFS + indegree | `topo.size() != n` | Levels / prerequisites |
+| Kahn + Levels | BFS by layers | `topo.size() != n` | Process same-level nodes |
+
+### Remember
+
+```text
+DFS:
+    visit children
+    add node after them
+    reverse
+
+Kahn:
+    take indegree = 0
+    remove its outgoing edges
+    newly zero indegree -> queue
+```
+
+### Common Applications
+
+- Course prerequisites
+- Task scheduling
+- Dependency resolution
+- Build systems
+- Ordering problems
+- DAG DP
+- Finding whether a directed graph contains a cycle
+- Finding the minimum number of rounds/levels for dependent tasks
+
+---
+
+# 6. Dijkstra's Algorithm
 
 Dijkstra's algorithm finds shortest-path distances from one source to all reachable vertices in a weighted graph with non-negative edge weights.
 
 It uses a **min-priority queue** to process the vertex with the smallest currently known distance.
 
-## 5.1 Properties and Complexity
+## 6.1 Properties and Complexity
 
 - Finds minimum-cost paths from a single source.
 - Supports directed and undirected graphs.
@@ -556,7 +1155,7 @@ With an adjacency list and a binary heap:
 
 The exact runtime can also be expressed as `O((n + m) log n)` for the usual implementation that inserts improved distance entries into the priority queue and ignores stale entries.
 
-## 5.2 Shortest Distance
+## 6.2 Shortest Distance
 
 Let `dis[v]` be the minimum known cost from the source to vertex `v`.
 
@@ -585,7 +1184,7 @@ if (d != dis[v])
     continue;
 ```
 
-## 5.3 Parent Tracking and Path Reconstruction
+## 6.3 Parent Tracking and Path Reconstruction
 
 To reconstruct one shortest path, store the predecessor of each vertex whenever a strictly shorter path is found:
 
@@ -606,7 +1205,7 @@ If `dis[end] == OO`, the destination is unreachable and no path exists.
 
 **Important:** If multiple shortest paths exist, the parent array stores only one of them.
 
-## 5.4 Counting Shortest Paths
+## 6.4 Counting Shortest Paths
 
 Let `mnPaths[v]` represent the number of shortest paths from the source to vertex `v`, usually modulo `MOD`.
 
@@ -638,7 +1237,7 @@ The new route contributes additional shortest paths.
 - Zero-weight edges require additional care because equal-distance dependencies can exist between vertices with the same distance.
 - If zero-weight cycles are allowed, the number of shortest walks may be infinite; counting shortest simple paths is a different problem.
 
-## 5.5 Minimum and Maximum Number of Edges
+## 6.5 Minimum and Maximum Number of Edges
 
 Among all minimum-cost paths from the source to each vertex, a template can track:
 
@@ -672,7 +1271,7 @@ These updates aggregate the smallest and largest edge counts among equally optim
 
 As with shortest-path counting, the straightforward implementation relies on strictly positive weights to ensure shortest-path predecessors have smaller distances and are processed before their successors.
 
-## 5.6 Important Conditions
+## 6.6 Important Conditions
 
 ### Non-Negative Edge Weights
 
@@ -695,7 +1294,7 @@ Dijkstra requires non-negative edge weights to guarantee shortest distances.
 
 ---
 
-# 6. DFS vs. BFS vs. Dijkstra
+# 7. DFS vs. BFS vs. Dijkstra
 
 | Feature | DFS | BFS | Dijkstra |
 |---|---|---|---|
@@ -721,7 +1320,7 @@ Dijkstra requires non-negative edge weights to guarantee shortest distances.
 
 ---
 
-# 7. Quick Decision Guide
+# 8. Quick Decision Guide
 
 | Problem Requirement | Preferred Algorithm |
 |---|---|
@@ -749,7 +1348,7 @@ Dijkstra requires non-negative edge weights to guarantee shortest distances.
 
 ---
 
-# 8. Future Notes
+# 9. Future Notes
 
 Use this section as a placeholder for future graph topics. Add new sections above it and update the Table of Contents when appropriate.
 
